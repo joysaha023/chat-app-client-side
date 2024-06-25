@@ -6,34 +6,50 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { Suspense, lazy, useState } from "react";
 import { orange } from "../../constants/color";
 import {
   Add as AddIcon,
   Menu as MenuIcon,
   Search as SearchIcon,
-  Group as GroupIcon
+  Group as GroupIcon,
+  Logout as LogoutIcon,
+  Notifications as NotificationsIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
-
+const SearchDialog = lazy(() => import("../specific/Search"));
+const NotificationDialog = lazy(() => import("../specific/Notifications"));
+const NewGroupDialog = lazy(() => import("../specific/NewGroup"));
 
 const Header = () => {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
+  const [isNewGroup, setIsNewGroup] = useState(false);
+  const [isNotification, setIsNotification] = useState(false);
 
   const handleMobile = () => {
-    console.log("Mobile");
+    setIsMobile((prev) => !prev);
   };
 
   const openSearchDialog = () => {
-    console.log("search");
+    setIsSearch((prev) => !prev);
   };
   const openNewGroup = () => {
-    console.log("openNewGroup");
+    setIsNewGroup((prev) => !prev);
   };
- 
-  const navigateToGroup = () => navigate("/groups")
+
+  const openNotification = () => {
+    setIsNotification((prev) => !prev);
+  };
+
+  const navigateToGroup = () => navigate("/groups");
+
+  const logoutHandler = () => {
+    console.log("LogOut");
+  };
 
   return (
     <>
@@ -57,30 +73,62 @@ const Header = () => {
             </Box>
             <Box sx={{ flexGrow: 1 }}></Box>
             <Box>
-              <Tooltip title="Search">
-                <IconButton
-                  color="inherit"
-                  size="large"
-                  onClick={openSearchDialog}
-                >
-                  <SearchIcon></SearchIcon>
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="New Group">
-                <IconButton color="inherit" size="large" onClick={openNewGroup}>
-                  <AddIcon></AddIcon>
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Manage Groups">
-              <IconButton color="inherit" size="large" onClick={navigateToGroup}>
-                  <GroupIcon></GroupIcon>
-                </IconButton>
-              </Tooltip>
+              <IconBtn
+                title={"Search"}
+                icon={<SearchIcon></SearchIcon>}
+                onClick={openSearchDialog}
+              ></IconBtn>
+              <IconBtn
+                title={"New Group"}
+                icon={<AddIcon></AddIcon>}
+                onClick={openNewGroup}
+              ></IconBtn>
+              <IconBtn
+                title={"Manage Groups"}
+                icon={<GroupIcon></GroupIcon>}
+                onClick={navigateToGroup}
+              ></IconBtn>
+              <IconBtn
+                title={"Notifications"}
+                icon={<NotificationsIcon></NotificationsIcon>}
+                onClick={openNotification}
+              ></IconBtn>
+              <IconBtn
+                title={"Logout"}
+                icon={<LogoutIcon></LogoutIcon>}
+                onClick={logoutHandler}
+              ></IconBtn>
             </Box>
           </Toolbar>
         </AppBar>
       </Box>
+
+      {isSearch && (
+        <Suspense fallback={<div>Loading.....</div>}>
+          <SearchDialog></SearchDialog>
+        </Suspense>
+      )}
+      {isNotification && (
+        <Suspense fallback={<div>Loading.....</div>}>
+          <NotificationDialog></NotificationDialog>
+        </Suspense>
+      )}
+      {isNewGroup && (
+        <Suspense fallback={<div>Loading.....</div>}>
+          <NewGroupDialog></NewGroupDialog>
+        </Suspense>
+      )}
     </>
+  );
+};
+
+const IconBtn = ({ title, icon, onClick }) => {
+  return (
+    <Tooltip title={title}>
+      <IconButton color="inherit" size="large" onClick={onClick}>
+        {icon}
+      </IconButton>
+    </Tooltip>
   );
 };
 
