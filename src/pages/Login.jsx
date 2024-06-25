@@ -23,9 +23,19 @@ const Login = () => {
   const username = useInputValidation("", usernameValidator);
   const password = useInputValidation("");
 
-  const avatar = useFileHandler("single")
+  const avatar = useFileHandler("single");
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+  }
+  const handleSignUp = (e) => {
+    e.preventDefault();
+  }
 
   return (
+    <div style={{
+      backgroundImage: "linear-gradient(rgb(255 255 209), rgb(249 159 159))",
+    }}>
     <Container
       component={"main"}
       maxWidth="xs"
@@ -53,6 +63,7 @@ const Login = () => {
                 width: "100%",
                 marginTop: "1rem",
               }}
+              onSubmit={handleLogin}
             >
               <TextField
                 required
@@ -63,11 +74,11 @@ const Login = () => {
                 value={username.value}
                 onChange={username.changeHandler}
               ></TextField>
-              {
-                username.error && (
-                  <Typography color="error" variant="caption">{username.error}</Typography>
-                )
-              }
+              {username.error && (
+                <Typography color="error" variant="caption">
+                  {username.error}
+                </Typography>
+              )}
               <TextField
                 required
                 fullWidth
@@ -78,11 +89,11 @@ const Login = () => {
                 value={password.value}
                 onChange={password.changeHandler}
               ></TextField>
-               {
-                password.error && (
-                  <Typography color="error" variant="caption">{password.error}</Typography>
-                )
-              }
+              {password.error && (
+                <Typography color="error" variant="caption">
+                  {password.error}
+                </Typography>
+              )}
               <Button
                 sx={{ marginTop: "1rem" }}
                 variant="contained"
@@ -108,12 +119,14 @@ const Login = () => {
                 width: "100%",
                 marginTop: "1rem",
               }}
+              onSubmit={handleSignUp}
             >
               <Stack position={"relative"} width={"10rem"} margin={"auto"}>
                 <Avatar
                   sx={{ width: "10rem", height: "10rem", objectFit: "contain" }}
                   src={avatar.preview}
                 ></Avatar>
+
                 <IconButton
                   sx={{
                     position: "absolute",
@@ -129,10 +142,18 @@ const Login = () => {
                 >
                   <>
                     <CameraAltIcon></CameraAltIcon>
-                    <VisuallyHiddenInput type="file" onChange={avatar.changeHandler}></VisuallyHiddenInput>
+                    <VisuallyHiddenInput
+                      type="file"
+                      onChange={avatar.changeHandler}
+                    ></VisuallyHiddenInput>
                   </>
                 </IconButton>
               </Stack>
+              {avatar.error && (
+                <Typography m={"1rem auto"} width={"fit-content"} display={"block"} color="error" variant="caption">
+                  {avatar.error}
+                </Typography>
+              )}
 
               <TextField
                 required
@@ -152,11 +173,11 @@ const Login = () => {
                 value={username.value}
                 onChange={username.changeHandler}
               ></TextField>
-              {
-                username.error && (
-                  <Typography color="error" variant="caption">{username.error}</Typography>
-                )
-              }
+              {username.error && (
+                <Typography color="error" variant="caption">
+                  {username.error}
+                </Typography>
+              )}
               <TextField
                 required
                 fullWidth
@@ -176,11 +197,11 @@ const Login = () => {
                 value={password.value}
                 onChange={password.changeHandler}
               ></TextField>
-               {
-                password.error && (
-                  <Typography color="error" variant="caption">{password.error}</Typography>
-                )
-              }
+              {password.error && (
+                <Typography color="error" variant="caption">
+                  {password.error}
+                </Typography>
+              )}
               <Button
                 sx={{ marginTop: "1rem" }}
                 variant="contained"
@@ -201,6 +222,7 @@ const Login = () => {
         )}
       </Paper>
     </Container>
+    </div>
   );
 };
 
